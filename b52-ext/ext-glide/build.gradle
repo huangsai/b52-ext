@@ -1,0 +1,5 @@
+apply from: "../gradle/android_lib_module.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
