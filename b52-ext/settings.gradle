@@ -1,2 +1,3 @@
+include ':ext-rxjava3'
 include ':ext-glide'
 include ':app'
