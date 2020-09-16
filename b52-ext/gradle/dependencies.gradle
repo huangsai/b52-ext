@@ -59,7 +59,8 @@ buildscript {
             'flexbox'          : '2.0.1',
             'fabric'           : '1.4.8',
             'store'            : '4.0.0-alpha07',
-            'theGuava'         : '0.0.6',
+            'theGuava'         : '0.0.7',
+            'theExt'           : '0.0.1',
             'pacificAdapter'   : '3.0.3',
 
             'androidX'         : [
@@ -242,8 +243,10 @@ buildscript {
                     'guavaJvm'      : "com.mobile.guava:guava-jvm:${versions.theGuava}",
                     'guavaAndroid'  : "com.mobile.guava:guava-android:${versions.theGuava}",
                     'guavaAndroidUi': "com.mobile.guava:guava-android-ui:${versions.theGuava}",
-                    'https'         : "com.mobile.guava:guava-https:${versions.theGuava}",
-                    'mvvm'          : "com.mobile.guava:guava-android-mvvm:${versions.theGuava}"
+                    'guavaHttps'    : "com.mobile.guava:guava-https:${versions.theGuava}",
+                    'guavaMvvm'     : "com.mobile.guava:guava-android-mvvm:${versions.theGuava}",
+                    'extGlide'      : "com.mobile.ext:ext-glide:${versions.theExt}",
+                    'extRxjava3'    : "com.mobile.ext:ext-rxjava3:${versions.theExt}"
             ],
             'androidX'         : [
                     'activity'           : [
@@ -307,7 +310,7 @@ buildscript {
                             'ktx'             : "androidx.dynamicanimation:dynamicanimation-ktx:${versions.androidX.dynamicanimationKtx}",
                     ],
                     'datastore'          : [
-                            'core' : "androidx.datastore:datastore-core:${versions.androidX.datastore}",
+                            'core'       : "androidx.datastore:datastore-core:${versions.androidX.datastore}",
                             'preferences': "androidx.datastore:datastore-preferences:${versions.androidX.datastore}"
                     ],
                     'emoji'              : [
