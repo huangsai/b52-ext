@@ -1,0 +1,12 @@
+apply from: "../gradle/android_lib_module.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation dep.exoplayer.core
+    implementation dep.exoplayer.dash
+    implementation dep.exoplayer.hls
+    implementation dep.exoplayer.smoothstreaming
+    implementation dep.exoplayer.ui
+    implementation dep.exoplayer.okhttp
+}

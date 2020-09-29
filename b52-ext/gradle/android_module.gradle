@@ -106,8 +106,6 @@ dependencies {
     implementation dep.androidX.window.window
     implementation dep.androidX.window.windowExt
 
-    implementation dep.androidX.datastore.core
-    implementation dep.androidX.datastore.preferences
     implementation dep.androidX.dynamicanimation.dynamicanimation
     implementation dep.androidX.dynamicanimation.ktx
     implementation dep.androidX.sharetarget
@@ -165,6 +163,4 @@ dependencies {
     implementation dep.company.guavaAndroidUi
     implementation dep.company.guavaHttps
     implementation dep.company.guavaMvvm
-    // implementation dep.company.extGlide
-    // implementation dep.company.extRxjava3
 }
