@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Util
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.text.md5Key
-import com.mobile.guava.https.createPoorSSLOkHttpClient
+import com.mobile.guava.data.createPoorSSLOkHttpClient
 import com.mobile.guava.jvm.Guava
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -32,7 +32,6 @@ import timber.log.Timber
 import java.io.File
 
 object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
-
 
     @Volatile
     private var isInitialized = false
@@ -55,7 +54,8 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
     private lateinit var trackSelector: DefaultTrackSelector
     private lateinit var player: SimpleExoPlayer
 
-    val isPlaying: Boolean get() = ExoPlayerX::player.isInitialized && !isPlayerDestroyed && player.isPlaying
+    val isPlaying: Boolean
+        get() = ExoPlayerX::player.isInitialized && !isPlayerDestroyed && player.isPlaying
 
     fun initialize() {
         if (isInitialized) {
@@ -65,27 +65,27 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
 
         databaseProvider = ExoDatabaseProvider(AndroidX.myApp)
         cache = SimpleCache(
-                File(AndroidX.myApp.externalCacheDir, "video_manager_disk_cache2"),
-                LeastRecentlyUsedCacheEvictor(256 * 1024 * 1024),
-                databaseProvider
+            File(AndroidX.myApp.externalCacheDir, "video_manager_disk_cache"),
+            LeastRecentlyUsedCacheEvictor(256 * 1024 * 1024),
+            databaseProvider
         )
         okHttpClient = createPoorSSLOkHttpClient(TAG_EXO_PLAYER)
         okHttpDataSourceFactory = OkHttpDataSourceFactory(
-                okHttpClient,
-                ExoPlayerLibraryInfo.DEFAULT_USER_AGENT
+            okHttpClient,
+            ExoPlayerLibraryInfo.DEFAULT_USER_AGENT
         )
         defaultDataSourceFactory = DefaultDataSourceFactory(
-                AndroidX.myApp,
-                okHttpDataSourceFactory
+            AndroidX.myApp,
+            okHttpDataSourceFactory
         )
         cacheDataSourceFactory = CacheDataSource.Factory()
-                .setCache(cache)
-                .setUpstreamDataSourceFactory(defaultDataSourceFactory)
+            .setCache(cache)
+            .setUpstreamDataSourceFactory(defaultDataSourceFactory)
 
         trackSelectorParameters = DefaultTrackSelector
-                .ParametersBuilder(AndroidX.myApp)
-                .setTunnelingAudioSessionId(C.generateAudioSessionIdV21(AndroidX.myApp))
-                .build()
+            .ParametersBuilder(AndroidX.myApp)
+            .setTunnelingAudioSessionId(C.generateAudioSessionIdV21(AndroidX.myApp))
+            .build()
         trackSelector = DefaultTrackSelector(AndroidX.myApp)
         trackSelector.parameters = trackSelectorParameters
 
@@ -96,10 +96,10 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
         isPlayerDestroyed = false
 
         player = SimpleExoPlayer.Builder(AndroidX.myApp)
-                .setUseLazyPreparation(false)
-                .setMediaSourceFactory(DefaultMediaSourceFactory(cacheDataSourceFactory))
-                .setTrackSelector(trackSelector)
-                .build()
+            .setUseLazyPreparation(false)
+            .setMediaSourceFactory(DefaultMediaSourceFactory(cacheDataSourceFactory))
+            .setTrackSelector(trackSelector)
+            .build()
 
         player.repeatMode = Player.REPEAT_MODE_ALL
         player.setWakeMode(C.WAKE_MODE_NONE)
@@ -128,8 +128,8 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
     }
 
     override fun onTracksChanged(
-            trackGroups: TrackGroupArray,
-            trackSelections: TrackSelectionArray
+        trackGroups: TrackGroupArray,
+        trackSelections: TrackSelectionArray
     ) {
         eventListeners.forEach {
             it.onTracksChanged(trackGroups, trackSelections)
@@ -205,16 +205,16 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
 
     override fun onProgress(requestLength: Long, bytesCached: Long, newBytesCached: Long) {
         Timber.tag(TAG_EXO_PLAYER).d(
-                "requestLength %s -bytesCached %s -newBytesCached %s",
-                requestLength,
-                bytesCached,
-                newBytesCached
+            "requestLength %s -bytesCached %s -newBytesCached %s",
+            requestLength,
+            bytesCached,
+            newBytesCached
         )
     }
 
     private fun createMediaSource(
-            @C.ContentType contentType: Int,
-            mediaItem: MediaItem
+        @C.ContentType contentType: Int,
+        mediaItem: MediaItem
     ): MediaSource {
         if (contentType == C.TYPE_DASH) {
             return DashMediaSource.Factory(cacheDataSourceFactory).createMediaSource(mediaItem)
@@ -226,8 +226,8 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
 
         if (contentType == C.TYPE_HLS) {
             return HlsMediaSource.Factory(cacheDataSourceFactory)
-                    .setAllowChunklessPreparation(true)
-                    .createMediaSource(mediaItem)
+                .setAllowChunklessPreparation(true)
+                .createMediaSource(mediaItem)
         }
 
         return ProgressiveMediaSource.Factory(cacheDataSourceFactory).createMediaSource(mediaItem)
@@ -235,11 +235,11 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
 
     private fun createCacheWriter(dataSpec: DataSpec): CacheWriter {
         return CacheWriter(
-                cacheDataSourceFactory.createDataSource(),
-                dataSpec,
-                true,
-                null,
-                this
+            cacheDataSourceFactory.createDataSource(),
+            dataSpec,
+            true,
+            null,
+            this
         )
     }
 
@@ -287,11 +287,8 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
         currentMediaSources = List(uris.size) { index ->
             uri = uris[index]
             createMediaSource(
-                    Util.inferContentType(uris[index]),
-                    MediaItem.Builder()
-                            .setTag(uri.md5Key())
-                            .setUri(uri)
-                            .build()
+                Util.inferContentType(uris[index]),
+                MediaItem.Builder().setTag(uri.md5Key()).setUri(uri).build()
             )
         }
         player.setMediaSources(currentMediaSources)
@@ -315,11 +312,11 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
 
             val cachingKey = uri.md5Key()
             val dataSpec = DataSpec.Builder()
-                    .setUri(uri)
-                    .setPosition(0L)
-                    .setLength(requestCacheLength)
-                    .setKey(cachingKey)
-                    .build()
+                .setUri(uri)
+                .setPosition(0L)
+                .setLength(requestCacheLength)
+                .setKey(cachingKey)
+                .build()
 
             val cached = cache.getCachedBytes(cachingKey, 0, requestCacheLength)
             if (cached > 0) {

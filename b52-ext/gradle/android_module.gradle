@@ -161,6 +161,6 @@ dependencies {
     implementation dep.company.guavaJvm
     implementation dep.company.guavaAndroid
     implementation dep.company.guavaAndroidUi
-    implementation dep.company.guavaHttps
+    implementation dep.company.guavaData
     implementation dep.company.guavaMvvm
 }

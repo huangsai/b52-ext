@@ -15,7 +15,7 @@ import com.bumptech.glide.load.engine.cache.ExternalPreferredCacheDiskCacheFacto
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
-import com.mobile.guava.https.createPoorSSLOkHttpClient
+import com.mobile.guava.data.createPoorSSLOkHttpClient
 import com.mobile.guava.jvm.Guava
 import java.io.InputStream
 
