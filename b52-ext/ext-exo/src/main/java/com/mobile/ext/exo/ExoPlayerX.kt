@@ -36,10 +36,8 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
     @Volatile
     private var isInitialized = false
 
-    private var isPlayerDestroyed = true
-    private var currentPosition: Long = 0L
-    private var currentWindowIndex: Int = -1
-    private var currentMediaSources: List<MediaSource> = emptyList()
+    private var isPlayerCreated = false
+    private var mediaSources: List<MediaSource> = emptyList()
 
     private val eventListeners: ArrayList<Player.EventListener> = ArrayList()
     private val controlDispatcher = DefaultControlDispatcher()
@@ -52,10 +50,11 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
     private lateinit var cacheDataSourceFactory: CacheDataSource.Factory
     private lateinit var trackSelectorParameters: DefaultTrackSelector.Parameters
     private lateinit var trackSelector: DefaultTrackSelector
-    private lateinit var player: SimpleExoPlayer
+    lateinit var player: SimpleExoPlayer
+        private set
 
     val isPlaying: Boolean
-        get() = ExoPlayerX::player.isInitialized && !isPlayerDestroyed && player.isPlaying
+        get() = isPlayerCreated && player.isPlaying
 
     fun initialize() {
         if (isInitialized) {
@@ -88,13 +87,12 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
             .build()
         trackSelector = DefaultTrackSelector(AndroidX.myApp)
         trackSelector.parameters = trackSelectorParameters
-
-        createPlayer()
     }
 
-    private fun createPlayer() {
-        isPlayerDestroyed = false
+    fun createPlayer() {
+        if (isPlayerCreated) return
 
+        isPlayerCreated = true
         player = SimpleExoPlayer.Builder(AndroidX.myApp)
             .setUseLazyPreparation(false)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheDataSourceFactory))
@@ -106,13 +104,20 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
         player.addListener(this)
     }
 
-    private fun destroyPlayer() {
-        isPlayerDestroyed = true
+    fun destroyPlayer() {
+        if (!isPlayerCreated) return
 
-        currentPosition = player.currentPosition
-        currentWindowIndex = player.currentWindowIndex
+        isPlayerCreated = false
         player.removeListener(this)
         player.release()
+    }
+
+    fun snapshotSource(): ExoSource {
+        return ExoSource(
+            player.currentPosition,
+            player.currentWindowIndex,
+            mediaSources
+        )
     }
 
     override fun onTimelineChanged(timeline: Timeline, reason: Int) {
@@ -255,59 +260,43 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
         }
     }
 
-    @JvmOverloads
-    fun pause(recreatePlayer: Boolean = false) {
-        if (!isInitialized) {
-            return
-        }
-        if (recreatePlayer) {
-            createPlayer()
-            player.seekTo(currentWindowIndex, currentPosition)
-            player.setMediaSources(currentMediaSources, currentPosition <= 1000L)
-            player.prepare()
-        } else {
-            controlDispatcher.dispatchSetPlayWhenReady(player, false)
-        }
+    fun resume() {
+        controlDispatcher.dispatchSetPlayWhenReady(player, true)
     }
 
-    @JvmOverloads
-    fun resume(destroyPlayer: Boolean = false) {
-        if (!isInitialized) {
-            return
-        }
-        if (destroyPlayer) {
-            destroyPlayer()
-        } else {
-            controlDispatcher.dispatchSetPlayWhenReady(player, true)
-        }
-    }
-
-    fun play(vararg uris: Uri) {
-        var uri: Uri
-        currentMediaSources = List(uris.size) { index ->
-            uri = uris[index]
-            createMediaSource(
-                Util.inferContentType(uris[index]),
-                MediaItem.Builder().setTag(uri.md5Key()).setUri(uri).build()
-            )
-        }
-        player.setMediaSources(currentMediaSources)
-        player.prepare()
+    fun pause() {
+        controlDispatcher.dispatchSetPlayWhenReady(player, false)
     }
 
     fun stop() {
-        if (!isInitialized) {
-            return
-        }
         controlDispatcher.dispatchStop(player, true)
+    }
+
+    fun play(source: ExoSource) {
+        mediaSources = source.mediaSources
+
+        player.seekTo(source.windowIndex, source.position)
+        player.setMediaSources(source.mediaSources, true)
+        player.prepare()
+    }
+
+    fun play(vararg uris: Uri) {
+        mediaSources = uris.map {
+            createMediaSource(
+                Util.inferContentType(it),
+                MediaItem.Builder().setTag(it.md5Key()).setUri(it).build()
+            )
+        }
+        player.setMediaSources(mediaSources)
+        player.prepare()
     }
 
     fun preload(uri: Uri) = GlobalScope.launch(Dispatchers.IO) {
         try {
             val requestCacheLength = if (Guava.isDebug) {
-                64L * 1024L
+                32L * 1024L
             } else {
-                1024L * 1024L
+                128L * 1024L
             }
 
             val cachingKey = uri.md5Key()
@@ -328,6 +317,4 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
             Timber.tag(TAG_EXO_PLAYER).d(e.message ?: "preload error")
         }
     }
-
-    fun requirePlayer(): SimpleExoPlayer = player
 }
