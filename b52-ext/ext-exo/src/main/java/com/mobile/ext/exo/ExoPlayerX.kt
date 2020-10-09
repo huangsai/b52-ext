@@ -108,6 +108,7 @@ object ExoPlayerX : Player.EventListener, CacheWriter.ProgressListener {
         if (!isPlayerCreated) return
 
         isPlayerCreated = false
+        mediaSources = emptyList()
         player.removeListener(this)
         player.release()
     }
