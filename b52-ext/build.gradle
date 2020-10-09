@@ -22,12 +22,14 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-serialization:${versions.kotlin}"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:${versions.ktLint}"
         classpath "com.vanniktech:gradle-maven-publish-plugin:${versions.mavenPublish}"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${versions.kotlin}"
     }
 }
 
 allprojects { project ->
 
     repositories {
+        mavenLocal()
         google()
         jcenter()
         mavenCentral()
@@ -37,7 +39,6 @@ allprojects { project ->
         maven { url "https://jitpack.io" }
         maven { url "http://192.168.2.126:8081/repository/maven-releases/" }
         maven { url "http://192.168.2.126:8081/repository/maven-snapshots/" }
-        mavenLocal()
 
         flatDir {
             dirs 'libs'
