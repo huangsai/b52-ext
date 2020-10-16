@@ -6,8 +6,7 @@ import android.widget.TextView;
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.util.Preconditions;
-
+import dagger.internal.Preconditions;
 import io.reactivex.rxjava3.core.Observable;
 
 public class RxView {
@@ -19,14 +18,16 @@ public class RxView {
     @CheckResult
     @NonNull
     public static Observable<View> clicks(@NonNull View view) {
-        Preconditions.checkNotNull(view, "view == null");
+        Preconditions.checkNotNull(view);
         return new ClickObservable(view);
     }
 
     @CheckResult
     @NonNull
-    public static InitialValueObservable<TextViewAfterTextChangeEvent> afterTextChangeEvents(@NonNull TextView view) {
-        Preconditions.checkNotNull(view, "view == null");
+    public static InitialValueObservable<TextViewAfterTextChangeEvent> afterTextChangeEvents(
+            @NonNull TextView view
+    ) {
+        Preconditions.checkNotNull(view);
         return new TextViewAfterTextChangeEventObservable(view);
     }
 }

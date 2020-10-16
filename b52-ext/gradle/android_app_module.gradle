@@ -1,12 +1,9 @@
+apply plugin: 'com.android.application'
+
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
-
-android {
-}
-
 
 dependencies {
     implementation fileTree(dir: 'dep', include: ['*.jar'])
@@ -31,14 +28,11 @@ dependencies {
     androidTestImplementation dep.androidX.multidex.instrumentation
 
     implementation dep.kotlin.stdlibJdk8
-    implementation dep.kotlin.stdlibJdk7
     implementation dep.kotlin.reflect
     implementation dep.ktSerialization
     implementation dep.ktCoroutines.core
     implementation dep.ktCoroutines.rxJava
     implementation dep.ktCoroutines.android
-
-    implementation dep.pacificAdapter
 
     implementation dep.okHttp.okHttp
     implementation dep.okHttp.loggingInterceptor
@@ -158,9 +152,17 @@ dependencies {
     kapt dep.androidX.remotecallback.processor
     implementation dep.androidX.multidex.multidex
 
+    implementation dep.androidX.compose.ui
+    implementation dep.androidX.compose.material
+    implementation dep.androidX.compose.uiTooling
+
     implementation dep.company.guavaJvm
     implementation dep.company.guavaAndroid
+    implementation dep.company.guavaMvvm
     implementation dep.company.guavaAndroidUi
     implementation dep.company.guavaData
-    implementation dep.company.guavaMvvm
+
+    implementation dep.company.extGlide
+    implementation dep.company.extRxjava3
+    implementation dep.company.extExo
 }

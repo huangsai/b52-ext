@@ -1,3 +1,4 @@
+include ':ext-floating'
 include ':ext-exo'
 include ':ext-rxjava3'
 include ':ext-glide'
