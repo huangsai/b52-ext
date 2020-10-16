@@ -1,0 +1,21 @@
+package com.mobile.ext.floating
+
+enum class Sliding {
+    DEFAULT,
+
+    LEFT,
+    TOP,
+    RIGHT,
+    BOTTOM,
+    HORIZONTAL,
+    VERTICAL,
+    HORIZONTAL_OR_VERTICAL,
+
+    RESULT_LEFT,
+    RESULT_RIGHT,
+    RESULT_TOP,
+    RESULT_BOTTOM,
+    RESULT_HORIZONTAL,
+    RESULT_VERTICAL,
+    RESULT_HORIZONTAL_OR_VERTICAL
+}
