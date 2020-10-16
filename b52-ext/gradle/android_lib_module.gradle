@@ -158,12 +158,6 @@ dependencies {
     implementation dep.androidX.remotecallback.remotecallback
     kapt dep.androidX.remotecallback.processor
     implementation dep.androidX.multidex.multidex
-
-    implementation dep.company.guavaJvm
-    implementation dep.company.guavaAndroid
-    implementation dep.company.guavaMvvm
-    implementation dep.company.guavaAndroidUi
-    implementation dep.company.guavaData
 }
 
 Properties properties = new Properties()
