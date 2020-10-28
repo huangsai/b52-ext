@@ -59,7 +59,7 @@ buildscript {
                 'flexbox'          : '2.0.1',
                 'fabric'           : '1.4.8',
                 'store'            : '4.0.0-beta01',
-                'theGuava'         : '0.2.2',
+                'theGuava'         : '0.2.6',
                 'theExt'           : '0.0.4',
                 'theSdk'           : '0.0.4',
                 'pacificAdapter'   : '3.0.3',
