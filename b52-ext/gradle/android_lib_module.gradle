@@ -164,7 +164,7 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 mavenPublish {
-    releaseSigningEnabled = true
+    releaseSigningEnabled = false
     targets {
         uploadArchives {
             releaseRepositoryUrl = properties.getProperty("RELEASE_REPOSITORY_URL")
