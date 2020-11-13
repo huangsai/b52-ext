@@ -160,17 +160,14 @@ dependencies {
     implementation dep.androidX.multidex.multidex
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 mavenPublish {
     releaseSigningEnabled = false
     targets {
         uploadArchives {
-            releaseRepositoryUrl = properties.getProperty("RELEASE_REPOSITORY_URL")
-            snapshotRepositoryUrl = properties.getProperty("SNAPSHOT_REPOSITORY_URL")
-            repositoryUsername = properties.getProperty("SONATYPE_NEXUS_USERNAME")
-            repositoryPassword = properties.getProperty("SONATYPE_NEXUS_PASSWORD")
+            releaseRepositoryUrl = RELEASE_REPOSITORY_URL
+            snapshotRepositoryUrl = SNAPSHOT_REPOSITORY_URL
+            repositoryUsername = SONATYPE_NEXUS_USERNAME
+            repositoryPassword = SONATYPE_NEXUS_PASSWORD
         }
 
         installArchives {
