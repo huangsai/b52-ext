@@ -1,0 +1,6 @@
+<resources>
+
+    <style name="FullScreenDialog" parent="AlertDialog.AppCompat">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>
