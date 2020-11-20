@@ -1,0 +1,11 @@
+apply from: "../gradle/android_lib_module.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation dep.company.guavaJvm
+    implementation dep.company.guavaAndroid
+    implementation dep.company.guavaMvvm
+    implementation dep.company.guavaAndroidUi
+    implementation dep.company.guavaData
+}
