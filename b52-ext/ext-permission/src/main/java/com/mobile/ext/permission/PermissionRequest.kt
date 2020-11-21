@@ -1,4 +1,4 @@
-package com.example.ext_permission
+package com.mobile.ext.permission
 
 import android.app.Activity
 import android.content.Intent
@@ -20,7 +20,10 @@ object PermissionRequest {
             existedFragment as InvisibleFragment
         } else {
             val invisibleFragment = InvisibleFragment()
-            fragmentManager.beginTransaction().add(invisibleFragment, TAG).commitNow()
+            fragmentManager.beginTransaction().add(
+                invisibleFragment,
+                TAG
+            ).commitNow()
             invisibleFragment
         }
         fragment.requestNow(callback, permission)

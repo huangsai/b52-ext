@@ -1,4 +1,4 @@
-package com.example.ext_permission
+package com.mobile.ext.permission
 
 interface PermissionCallback {
     fun passPermissions()

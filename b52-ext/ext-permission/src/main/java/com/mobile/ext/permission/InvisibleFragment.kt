@@ -1,10 +1,9 @@
-package com.example.ext_permission
+package com.mobile.ext.permission
 
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.ext_permission.PermissionCallback
 
 class InvisibleFragment : Fragment() {
 
@@ -18,11 +17,14 @@ class InvisibleFragment : Fragment() {
                 granted += ContextCompat.checkSelfPermission(requireActivity(), i)
             }
             if (granted
-                    == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED
+            ) {
                 callback?.passPermissions()
             } else {
-                requestPermissions(permission,
-                        1)
+                requestPermissions(
+                    permission,
+                    1
+                )
             }
         } else {
             callback?.passPermissions()
@@ -36,9 +38,9 @@ class InvisibleFragment : Fragment() {
      * @param grantResults IntArray 请求结果
      */
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
     ) {
         if (requestCode == 1) {
             callback?.onRequestPermissions(permissions, grantResults)
