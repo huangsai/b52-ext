@@ -23,7 +23,7 @@ object FloatPermissionUtils {
     // 使用示例
     //PermissionUtils.checkPermission(activity) ->
     //else -> PermissionUtils.requestPermission(activity，OnPermissionResult)// 申请浮窗权限
-
+    //添加<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     /**
      * 检测是否有悬浮窗权限
      * 6.0 版本之后由于 google 增加了对悬浮窗权限的管理，所以方式就统一了
