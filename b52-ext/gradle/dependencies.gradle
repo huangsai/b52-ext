@@ -112,7 +112,7 @@ buildscript {
                         'multidex'                  : '2.0.1',
                         'multidexInstrumentation'   : '2.0.0',
 
-                        'navigation'                : '2.3.0',
+                        'navigation'                : '2.3.1',
                         'paging'                    : '3.0.0-alpha07',
                         'palette'                   : '1.0.0',
                         'preference'                : '1.1.1',
